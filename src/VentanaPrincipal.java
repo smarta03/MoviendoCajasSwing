@@ -61,12 +61,13 @@ public class VentanaPrincipal extends JFrame implements ActionListener{
 			VentanaDis ventanadis = new VentanaDis();
 			Thread hilo = new Thread(ventanadis);
 			hilo.start();
-			
-			//ventanadis.setVisible(true);
+
 		}
 
 		if(e.getActionCommand().equals("JUGAR")==true) {
-
+			VentanaJug ventanajug = new VentanaJug();
+			Thread hilo = new Thread(ventanajug);
+			hilo.start();
 		}
 
 	}
