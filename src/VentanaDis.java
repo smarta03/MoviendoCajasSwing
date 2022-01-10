@@ -1,3 +1,4 @@
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -9,6 +10,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -42,6 +44,7 @@ public class VentanaDis extends JFrame implements Runnable, ActionListener, Seri
 	public VentanaDis() {
 		super("DISEÑADOR");
 		this.setSize(new Dimension(600, 400));
+		this.setResizable(false);
 	}
 
 	@Override
@@ -125,8 +128,59 @@ public class VentanaDis extends JFrame implements Runnable, ActionListener, Seri
 
 		panelControl.add(siguiente);
 
+		filMas.setBackground(new Color(50,50,50,255));
+		filMas.setFont(new Font("Agency FB", Font.BOLD, 20));
+		filMas.setForeground(Color.WHITE);
+		filMas.setBorder(BorderFactory.createLineBorder(new Color(50,50,50,255), 20));
+		
+		filMen.setBackground(new Color(50,50,50,255));
+		filMen.setFont(new Font("Agency FB", Font.BOLD, 20));
+		filMen.setForeground(Color.WHITE);
+		filMen.setBorder(BorderFactory.createLineBorder(new Color(50,50,50,255), 20));
 
-		pack();
+		colMas.setBackground(new Color(50,50,50,255));
+		colMas.setFont(new Font("Agency FB", Font.BOLD, 20));
+		colMas.setForeground(Color.WHITE);
+		colMas.setBorder(BorderFactory.createLineBorder(new Color(50,50,50,255), 20));
+		
+		colMen.setBackground(new Color(50,50,50,255));
+		colMen.setFont(new Font("Agency FB", Font.BOLD, 20));
+		colMen.setForeground(Color.WHITE);
+		colMen.setBorder(BorderFactory.createLineBorder(new Color(50,50,50,255), 20));
+		
+		siguiente.setBackground(new Color(50,50,50,255));
+		siguiente.setFont(new Font("Agency FB", Font.BOLD, 20));
+		siguiente.setForeground(Color.WHITE);
+		siguiente.setBorder(BorderFactory.createLineBorder(new Color(50,50,50,255), 20));
+		
+		atras.setBackground(new Color(50,50,50,255));
+		atras.setFont(new Font("Agency FB", Font.BOLD, 20));
+		atras.setForeground(Color.WHITE);
+		atras.setBorder(BorderFactory.createLineBorder(new Color(50,50,50,255), 20));
+		
+		lab1.setBackground(new Color(50,50,50,255));
+		lab1.setFont(new Font("Agency FB", Font.BOLD, 20));
+		lab1.setForeground(Color.BLACK);
+		
+		nomFilas.setBackground(new Color(50,50,50,255));
+		nomFilas.setFont(new Font("Agency FB", Font.BOLD, 20));
+		nomFilas.setForeground(Color.BLACK);
+		
+		labFilas.setBackground(new Color(50,50,50,255));
+		labFilas.setFont(new Font("Agency FB", Font.BOLD, 20));
+		labFilas.setForeground(Color.BLACK);
+		
+		nomColumnas.setBackground(new Color(50,50,50,255));
+		nomColumnas.setFont(new Font("Agency FB", Font.BOLD, 20));
+		nomColumnas.setForeground(Color.BLACK);
+		
+		labColumnas.setBackground(new Color(50,50,50,255));
+		labColumnas.setFont(new Font("Agency FB", Font.BOLD, 20));
+		labColumnas.setForeground(Color.BLACK);
+		
+		
+		
+		//pack();
 		setVisible(true);
 
 	}
@@ -170,6 +224,8 @@ public class VentanaDis extends JFrame implements Runnable, ActionListener, Seri
 		modelo.setColumnCount(columnas);
 		modelo.setRowCount(filas);
 		tabla.setModel(modelo);
+		
+		
 
 		//Alinear texto de celdas en el centro
 		DefaultTableCellRenderer render = new DefaultTableCellRenderer();
@@ -205,8 +261,16 @@ public class VentanaDis extends JFrame implements Runnable, ActionListener, Seri
 		panelControl.add(siguiente);
 
 
+		lab2.setBackground(new Color(50,50,50,255));
+		lab2.setFont(new Font("Agency FB", Font.BOLD, 20));
+		lab2.setForeground(Color.BLACK);
 
-		panelTitulo.setPreferredSize(new Dimension(600,150));
+		lab3.setBackground(new Color(50,50,50,255));
+		lab3.setFont(new Font("Agency FB", Font.BOLD, 20));
+		lab3.setForeground(Color.BLACK);
+		
+		panelTitulo.setPreferredSize(new Dimension(800,150));
+		panelInsertarDatos.setPreferredSize(new Dimension(800,500));
 		pack();
 		this.repaint();
 
@@ -271,7 +335,37 @@ public class VentanaDis extends JFrame implements Runnable, ActionListener, Seri
 		panelControl.add(jugar);
 		jugar.setVisible(false);
 
-		pack();
+		
+		comprobar.setBackground(new Color(50,50,50,255));
+		comprobar.setFont(new Font("Agency FB", Font.BOLD, 20));
+		comprobar.setForeground(Color.WHITE);
+		comprobar.setBorder(BorderFactory.createLineBorder(new Color(50,50,50,255), 20));
+		
+		jugar.setBackground(new Color(50,50,50,255));
+		jugar.setFont(new Font("Agency FB", Font.BOLD, 20));
+		jugar.setForeground(Color.WHITE);
+		jugar.setBorder(BorderFactory.createLineBorder(new Color(50,50,50,255), 20));
+		
+		lab2.setBackground(new Color(50,50,50,255));
+		lab2.setFont(new Font("Agency FB", Font.BOLD, 20));
+		lab2.setForeground(Color.BLACK);
+		
+		lab3.setBackground(new Color(50,50,50,255));
+		lab3.setFont(new Font("Agency FB", Font.BOLD, 20));
+		lab3.setForeground(Color.BLACK);
+		
+		lab4.setBackground(new Color(50,50,50,255));
+		lab4.setFont(new Font("Agency FB", Font.BOLD, 20));
+		lab4.setForeground(Color.BLACK);
+		
+		lab5.setBackground(new Color(50,50,50,255));
+		lab5.setFont(new Font("Agency FB", Font.BOLD, 20));
+		lab5.setForeground(Color.BLACK);
+		
+		panelTitulo.setPreferredSize(new Dimension(800,150));
+		panelInsertarDatos.setPreferredSize(new Dimension(800,500));
+		
+		//pack();
 		repaint();
 	}
 
@@ -319,6 +413,8 @@ public class VentanaDis extends JFrame implements Runnable, ActionListener, Seri
 			panelTitulo.removeAll();
 			panelInsertarDatos.removeAll();
 			panelControl.removeAll();
+			
+			repaint();
 
 			//CREO UN METODO NUEVO PARA LA SIGUIENTE VENTANA
 			pantallaDefinirHabitacion();
@@ -328,7 +424,9 @@ public class VentanaDis extends JFrame implements Runnable, ActionListener, Seri
 			panelTitulo.removeAll();
 			panelInsertarDatos.removeAll();
 			panelControl.removeAll();
-
+				
+			repaint();
+			
 			pantallaEstablecerTamannio();
 		}
 
@@ -337,6 +435,8 @@ public class VentanaDis extends JFrame implements Runnable, ActionListener, Seri
 			panelInsertarDatos.removeAll();
 			panelControl.removeAll();
 
+			repaint();
+			
 			pantallaColocarObjetos();
 		}
 
@@ -344,6 +444,8 @@ public class VentanaDis extends JFrame implements Runnable, ActionListener, Seri
 			panelTitulo.removeAll();
 			panelInsertarDatos.removeAll();
 			panelControl.removeAll();
+			
+			repaint();
 
 			pantallaDefinirHabitacion();
 		}
@@ -385,6 +487,10 @@ public class VentanaDis extends JFrame implements Runnable, ActionListener, Seri
 			//			hilo.start();
 
 			leerEntrada.leerEntradaHabitacion();
+			
+			comprobacion.setBackground(new Color(50,50,50,255));
+			comprobacion.setFont(new Font("Agency FB", Font.BOLD, 20));
+			comprobacion.setForeground(Color.BLACK);
 
 			if(leerEntrada.getResultado()==null) {
 				comprobacion.setText("Entrada mal formada");
@@ -396,7 +502,7 @@ public class VentanaDis extends JFrame implements Runnable, ActionListener, Seri
 				siguiente.setVisible(true);
 				jugar.setVisible(true);
 
-				pack();
+				//pack();
 			}
 
 			repaint();

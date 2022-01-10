@@ -1,13 +1,6 @@
-import javax.swing.AbstractButton;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JSlider;
-import javax.swing.JTextArea;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -29,37 +22,40 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 	private JButton resolver, guardar, cargar, anterior, siguiente;
 	private JLabel etiquetaTiempo, tiempo;
 	private int time, filas, columnas, robotFil, robotCol, indiceHistorial, totalMov;
-	private JPanel panelTitulo, panelMenu, panelControl;
-	//private GridLayout tablero;
+	private JPanel panelTitulo, panelMenu;
 	private String[][] tablero;
 	private Component[] componentes;
 	private String nextCharRob, debCharRob;
 	private ArrayList<String[][]> historial;
 	private KeyboardFocusManager manager;
 	private ControladorKeys control;
+	private Boolean todaviaHayCaja;
 
 	public VentanaJug() {
 		super("JUGAR");
-		this.setSize(new Dimension(600, 600));
+		this.setSize(new Dimension(850, 600));
+		this.setResizable(false);
 	}
+	
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
 
 		panelTitulo = new JPanel();
-		this.getContentPane().add(panelTitulo, BorderLayout.NORTH); 
-		panelTitulo.setLayout(new FlowLayout(FlowLayout.LEFT, 20 , 20));
+		this.getContentPane().add(panelTitulo, BorderLayout.NORTH);
+		//panelTitulo.setLayout(new FlowLayout(FlowLayout.LEFT, 20 , 20));
 
 		panelMenu = new JPanel();
-		this.getContentPane().add(panelMenu, BorderLayout.CENTER); 
-		panelMenu.setLayout(new FlowLayout(FlowLayout.CENTER, 20 , 20));
+		this.getContentPane().add(panelMenu, BorderLayout.SOUTH); 
+		//panelMenu.setLayout(new FlowLayout(FlowLayout.CENTER, 20 , 20));
 
-		panelControl = new JPanel();
-		this.getContentPane().add(panelControl, BorderLayout.CENTER); 
-		panelControl.setLayout(new FlowLayout(FlowLayout.CENTER, 20 , 20));
+		/*panelControl = new JPanel();
+		this.getContentPane().add(panelControl, BorderLayout.SOUTH); 
+		panelControl.setLayout(new FlowLayout(FlowLayout.CENTER, 20 , 20));*/
 
-		panelTitulo.setBackground(Color.GREEN);
+		//panelTitulo.setBackground(Color.GREEN);
+
 
 
 		//RESOLVER EN X TIEMPO
@@ -67,11 +63,14 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 		panelTitulo.add(resolver);
 		resolver.addActionListener(this);
 
+		//etiquetaTiempo = new JLabel(new ImageIcon(getClass().getResource("ico/time.png")));
 		etiquetaTiempo = new JLabel("Tiempo");
+		JLabel seg = new JLabel("s");
 		time = 360;
 		tiempo = new JLabel(time+"");
 		panelTitulo.add(etiquetaTiempo);
 		panelTitulo.add(tiempo);
+		panelTitulo.add(seg);
 
 		//JProgressBar barraProg = new JProgressBar();
 		JSlider barraSlid = new JSlider(JSlider.HORIZONTAL,0,1000,20 );
@@ -81,6 +80,7 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 		barraSlid.setPaintTicks(true);
 		barraSlid.setMajorTickSpacing(100);
 		barraSlid.setMinorTickSpacing(25);
+		barraSlid.setBackground(new Color(220,220,220));
 		//barraSlid.setBorder( new TitledBorder("Desplazame") );
 		barraSlid.addChangeListener( new ChangeListener() {
 			public void stateChanged( ChangeEvent evt ) {
@@ -90,7 +90,7 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 		panelTitulo.add(barraSlid);
 
 		// GUARDAR, CARGAR, ANTERIOR, SIGUIENTE
-		JLabel espacio = new JLabel("                                      ");
+		JLabel espacio = new JLabel("                             ");
 		guardar = new JButton("Guardar");
 		cargar = new JButton("Cargar");
 		anterior = new JButton("<-");
@@ -109,27 +109,52 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 
 		//PANEL menu
 
-		//tablero = new GridLayout(20,20);
-		//this.setLayout(tablero);
-
-		//panelTitulo.setLayout(new FlowLayout(FlowLayout.LEFT, 20 , 20));
-
-		//int[][] datosTablero = new int[][];
-
-
-		//Control pulsar flechas para mover el robot
-		//panelMenu.addKeyListener(this);
-
-		//KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventPostProcessor(this);
-		debCharRob="-";
-		indiceHistorial = 0;
-		historial = new ArrayList<String[][]>();
-
 
 		//panelTitulo.setPreferredSize(new Dimension(600,100));
-		pack();
-		setVisible(true);
+		//pack();
 
+		//Aspecto
+		panelTitulo.setBackground(new Color(220,220,220));
+		panelMenu.setBackground(new Color(220,220,220));
+
+		resolver.setBackground(new Color(50,50,50,255));
+		resolver.setFont(new Font("Agency FB", Font.BOLD, 20));
+		resolver.setForeground(Color.WHITE);
+		resolver.setBorder(BorderFactory.createLineBorder(new Color(50,50,50,255), 20));
+
+		etiquetaTiempo.setFont(new Font("Agency FB", Font.BOLD, 20));
+		etiquetaTiempo.setForeground(Color.BLACK);
+
+		tiempo.setBackground(new Color(50,50,50,255));
+		tiempo.setFont(new Font("Agency FB", Font.BOLD, 20));
+		tiempo.setForeground(Color.BLACK);
+
+		seg.setBackground(new Color(50,50,50,255));
+		seg.setFont(new Font("Agency FB", Font.BOLD, 20));
+		seg.setForeground(Color.BLACK);
+
+		guardar.setBackground(new Color(50,50,50,255));
+		guardar.setFont(new Font("Agency FB", Font.BOLD, 20));
+		guardar.setForeground(Color.WHITE);
+		guardar.setBorder(BorderFactory.createLineBorder(new Color(50,50,50,255), 20));
+
+		cargar.setBackground(new Color(50,50,50,255));
+		cargar.setFont(new Font("Agency FB", Font.BOLD, 20));
+		cargar.setForeground(Color.WHITE);
+		cargar.setBorder(BorderFactory.createLineBorder(new Color(50,50,50,255), 20));
+
+		anterior.setBackground(new Color(50,50,50,255));
+		anterior.setFont(new Font("Agency FB", Font.BOLD, 20));
+		anterior.setForeground(Color.WHITE);
+		anterior.setBorder(BorderFactory.createLineBorder(new Color(50,50,50,255), 20));
+
+		siguiente.setBackground(new Color(50,50,50,255));
+		siguiente.setFont(new Font("Agency FB", Font.BOLD, 20));
+		siguiente.setForeground(Color.WHITE);
+		siguiente.setBorder(BorderFactory.createLineBorder(new Color(50,50,50,255), 20));
+	
+
+		setVisible(true);
 	}
 
 	@Override
@@ -224,6 +249,7 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 
 		if(e.getActionCommand().equals("Cargar")==true) {
 
+			
 			//Cargar el fichero
 			JFileChooser loadFile = new JFileChooser();
 			loadFile.showOpenDialog(loadFile);
@@ -270,7 +296,7 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 					scn.close();
 
 					//Establecer los botonoes con el problema
-					panelMenu.setLayout(new GridLayout(filas,columnas));
+					panelMenu.setLayout(new GridLayout(filas,columnas,3,3));
 
 
 					//Anniadir el numero de botones correspondiente
@@ -284,7 +310,24 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 					int cont = 0;
 					for(int i=0; i<filas; i++) {
 						for(int j=0; j<columnas; j++) {
-							((AbstractButton)componentes[cont]).setText(tablero[i][j]);
+							//((AbstractButton)componentes[cont]).setText(tablero[i][j]);
+							((AbstractButton)componentes[cont]).setEnabled(false);
+							if(tablero[i][j].compareTo("@")==0) {
+								((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/robot.png")));	
+							} else if(tablero[i][j].compareTo("#")==0) {
+								((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/money.png")));	
+							} else if(tablero[i][j].compareTo("!")==0) {
+								((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/destino.png")));	
+							} else if(tablero[i][j].compareTo("1")==0) {
+								((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/pared.png")));	
+							} else if(tablero[i][j].compareTo("0")==0) {
+								((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/pared.png")));	
+							} else if(tablero[i][j].compareTo("*")==0) {
+								((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/destinoAlcanzado.png")));	
+							} else {
+								((AbstractButton)componentes[cont]).setIcon(null);
+							}
+							//((AbstractButton)componentes[cont]).setBackground(new Color(50,50,50,10));
 							cont++;
 						}
 
@@ -299,6 +342,9 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 						}
 					} 
 
+					debCharRob="-";
+					indiceHistorial = 0;
+					historial = new ArrayList<String[][]>();
 
 					historial.add(tabTemp);
 					//indiceHistorial++;
@@ -307,6 +353,11 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 					manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
 					control = new ControladorKeys();
 					manager.addKeyEventDispatcher(control);
+
+					//Quitar boton de cargar
+					cargar.setBackground(new Color(220,220,220));
+					cargar.setEnabled(false);
+					cargar.setBorder(BorderFactory.createLineBorder(new Color(220,220,220), 20));
 
 
 				} catch (Exception e2) {
@@ -321,12 +372,30 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 			if(indiceHistorial>0) {
 				indiceHistorial--;
 				tablero = historial.get(indiceHistorial);
-				totalMov++;
+				totalMov--;
 				//Cargar historial en botones
 				int cont = 0;
 				for(int i=0; i<filas; i++) {
 					for(int j=0; j<columnas; j++) {
-						((AbstractButton)componentes[cont]).setText(tablero[i][j]);
+						((AbstractButton)componentes[cont]).setEnabled(false);
+						if(tablero[i][j].compareTo("@")==0) {
+							robotFil = i;
+							robotCol = j;
+							((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/robot.png")));	
+						} else if(tablero[i][j].compareTo("#")==0) {
+							((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/money.png")));	
+						} else if(tablero[i][j].compareTo("!")==0) {
+							((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/destino.png")));	
+						} else if(tablero[i][j].compareTo("1")==0) {
+							((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/pared.png")));	
+						} else if(tablero[i][j].compareTo("0")==0) {
+							((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/pared.png")));	
+						} else if(tablero[i][j].compareTo("*")==0) {
+							((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/destinoAlcanzado.png")));	
+						} else {
+							((AbstractButton)componentes[cont]).setIcon(null);
+						} 
+
 						cont++;
 					}
 
@@ -336,15 +405,31 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 		}
 
 		if(e.getActionCommand().equals("->")==true) {
-			if(indiceHistorial<historial.size()) {
+			if(indiceHistorial<historial.size()-1) {
 				indiceHistorial++;
 				tablero = historial.get(indiceHistorial);
-				totalMov--;
+				totalMov++;
 				//Cargar historial en botones
 				int cont = 0;
 				for(int i=0; i<filas; i++) {
 					for(int j=0; j<columnas; j++) {
-						((AbstractButton)componentes[cont]).setText(tablero[i][j]);
+						((AbstractButton)componentes[cont]).setEnabled(false);
+						if(tablero[i][j].compareTo("@")==0) {
+							((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/robot.png")));	
+						} else if(tablero[i][j].compareTo("#")==0) {
+							((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/money.png")));	
+						} else if(tablero[i][j].compareTo("!")==0) {
+							((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/destino.png")));	
+						} else if(tablero[i][j].compareTo("1")==0) {
+							((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/pared.png")));	
+						} else if(tablero[i][j].compareTo("0")==0) {
+							((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/pared.png")));	
+						} else if(tablero[i][j].compareTo("*")==0) {
+							((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/destinoAlcanzado.png")));	
+						} else {
+							((AbstractButton)componentes[cont]).setIcon(null);
+						} 
+
 						cont++;
 					}
 
@@ -433,7 +518,23 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 						int cont = 0;
 						for(int i=0; i<filas; i++) {
 							for(int j=0; j<columnas; j++) {
-								((AbstractButton)componentes[cont]).setText(tablero[i][j]);
+								((AbstractButton)componentes[cont]).setEnabled(false);
+								if(tablero[i][j].compareTo("@")==0) {
+									((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/robot.png")));	
+								} else if(tablero[i][j].compareTo("#")==0) {
+									((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/money.png")));	
+								} else if(tablero[i][j].compareTo("!")==0) {
+									((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/destino.png")));	
+								} else if(tablero[i][j].compareTo("1")==0) {
+									((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/pared.png")));	
+								} else if(tablero[i][j].compareTo("0")==0) {
+									((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/pared.png")));	
+								} else if(tablero[i][j].compareTo("*")==0) {
+									((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/destinoAlcanzado.png")));	
+								} else {
+									((AbstractButton)componentes[cont]).setIcon(null);
+								}
+
 								cont++;
 							}
 
@@ -513,7 +614,23 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 						int cont = 0;
 						for(int i=0; i<filas; i++) {
 							for(int j=0; j<columnas; j++) {
-								((AbstractButton)componentes[cont]).setText(tablero[i][j]);
+								((AbstractButton)componentes[cont]).setEnabled(false);
+								if(tablero[i][j].compareTo("@")==0) {
+									((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/robot.png")));	
+								} else if(tablero[i][j].compareTo("#")==0) {
+									((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/money.png")));	
+								} else if(tablero[i][j].compareTo("!")==0) {
+									((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/destino.png")));	
+								} else if(tablero[i][j].compareTo("1")==0) {
+									((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/pared.png")));	
+								} else if(tablero[i][j].compareTo("0")==0) {
+									((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/pared.png")));	
+								} else if(tablero[i][j].compareTo("*")==0) {
+									((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/destinoAlcanzado.png")));	
+								} else {
+									((AbstractButton)componentes[cont]).setIcon(null);
+								}
+
 								cont++;
 							}
 
@@ -596,7 +713,23 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 						int cont = 0;
 						for(int i=0; i<filas; i++) {
 							for(int j=0; j<columnas; j++) {
-								((AbstractButton)componentes[cont]).setText(tablero[i][j]);
+								((AbstractButton)componentes[cont]).setEnabled(false);
+								if(tablero[i][j].compareTo("@")==0) {
+									((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/robot.png")));	
+								} else if(tablero[i][j].compareTo("#")==0) {
+									((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/money.png")));	
+								} else if(tablero[i][j].compareTo("!")==0) {
+									((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/destino.png")));	
+								} else if(tablero[i][j].compareTo("1")==0) {
+									((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/pared.png")));	
+								} else if(tablero[i][j].compareTo("0")==0) {
+									((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/pared.png")));	
+								} else if(tablero[i][j].compareTo("*")==0) {
+									((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/destinoAlcanzado.png")));	
+								} else {
+									((AbstractButton)componentes[cont]).setIcon(null);
+								}
+
 								cont++;
 							}
 
@@ -680,7 +813,23 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 						int cont = 0;
 						for(int i=0; i<filas; i++) {
 							for(int j=0; j<columnas; j++) {
-								((AbstractButton)componentes[cont]).setText(tablero[i][j]);
+								((AbstractButton)componentes[cont]).setEnabled(false);
+								if(tablero[i][j].compareTo("@")==0) {
+									((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/robot.png")));	
+								} else if(tablero[i][j].compareTo("#")==0) {
+									((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/money.png")));	
+								} else if(tablero[i][j].compareTo("!")==0) {
+									((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/destino.png")));	
+								} else if(tablero[i][j].compareTo("1")==0) {
+									((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/pared.png")));	
+								} else if(tablero[i][j].compareTo("0")==0) {
+									((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/pared.png")));	
+								} else if(tablero[i][j].compareTo("*")==0) {
+									((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/destinoAlcanzado.png")));	
+								} else {
+									((AbstractButton)componentes[cont]).setIcon(null);
+								}
+
 								cont++;
 							}
 
@@ -706,7 +855,7 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 				indiceHistorial++;
 
 				//CONTROLAR GANAR PARTIDA
-				boolean todaviaHayCaja = false;
+				todaviaHayCaja = false;
 				for(int i=0; i<filas;i++) {
 					for(int j=0;j<columnas;j++) {
 						if(tablero[i][j].compareTo("#")==0) {
@@ -716,9 +865,34 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 				}
 
 				if(!todaviaHayCaja) {
+					//JOptionPane pane = new JOptionPane();
+					//pane.showMessageDialog(panelMenu, "Has ganado! Movimientos totales: "+totalMov, "ENHORABUENA", 1);
+
 					JOptionPane.showMessageDialog(panelMenu, "Has ganado! Movimientos totales: "+totalMov, "ENHORABUENA", 1);
-					tablero = null;
 					panelMenu.removeAll();
+					
+					time = 0;
+					filas = 0;
+					columnas = 0;
+					robotFil = 0;
+					robotCol = 0;
+					indiceHistorial = 0;
+					totalMov = 0;
+					//componentes = null;
+					nextCharRob = ""; 
+					debCharRob = "";
+					//historial = null;
+					//manager = null;
+					//control = null;
+					//tablero = null;
+					
+					
+					
+					//Restablecer el boton cargar
+					cargar.setBackground(new Color(50,50,50,255));
+					cargar.setEnabled(true);
+					cargar.setBorder(BorderFactory.createLineBorder(new Color(50,50,50,255), 20));
+					
 					repaint();
 				}
 
