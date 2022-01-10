@@ -349,7 +349,6 @@ public class VentanaDis extends JFrame implements Runnable, ActionListener, Seri
 		}
 
 
-
 		if(e.getActionCommand().equals("Comprobar habitacion")==true) {
 			//Recoger la forma de la habitacion
 			//La recoge cuando pulsa el boton colocar elementos
