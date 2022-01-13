@@ -30,13 +30,16 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 	private KeyboardFocusManager manager;
 	private ControladorKeys control;
 	private Boolean todaviaHayCaja;
+	private JFileChooser loadFile;
 
 	public VentanaJug() {
 		super("JUGAR");
 		this.setSize(new Dimension(850, 600));
 		this.setResizable(false);
+		manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+		control = new ControladorKeys();
 	}
-	
+
 
 	@Override
 	public void run() {
@@ -56,7 +59,7 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 
 		//panelTitulo.setBackground(Color.GREEN);
 
-
+		tablero = null;
 
 		//RESOLVER EN X TIEMPO
 		resolver = new JButton("Resolver");
@@ -107,6 +110,8 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 		panelTitulo.add(anterior);
 		panelTitulo.add(siguiente);
 
+		JLabel instruccion = new JLabel("Desplaza el robot con las flechas del raton");
+		panelTitulo.add(instruccion);
 		//PANEL menu
 
 
@@ -132,11 +137,19 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 		seg.setBackground(new Color(50,50,50,255));
 		seg.setFont(new Font("Agency FB", Font.BOLD, 20));
 		seg.setForeground(Color.BLACK);
+		
+		instruccion.setBackground(new Color(50,50,50,255));
+		instruccion.setFont(new Font("Agency FB", Font.BOLD, 20));
+		instruccion.setForeground(Color.BLACK);
 
-		guardar.setBackground(new Color(50,50,50,255));
+		//guardar.setBackground(new Color(50,50,50,255));
 		guardar.setFont(new Font("Agency FB", Font.BOLD, 20));
 		guardar.setForeground(Color.WHITE);
-		guardar.setBorder(BorderFactory.createLineBorder(new Color(50,50,50,255), 20));
+		//guardar.setBorder(BorderFactory.createLineBorder(new Color(50,50,50,255), 20));
+		
+		guardar.setBackground(new Color(220,220,220));
+		guardar.setEnabled(false);
+		guardar.setBorder(BorderFactory.createLineBorder(new Color(220,220,220), 20));
 
 		cargar.setBackground(new Color(50,50,50,255));
 		cargar.setFont(new Font("Agency FB", Font.BOLD, 20));
@@ -152,7 +165,7 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 		siguiente.setFont(new Font("Agency FB", Font.BOLD, 20));
 		siguiente.setForeground(Color.WHITE);
 		siguiente.setBorder(BorderFactory.createLineBorder(new Color(50,50,50,255), 20));
-	
+
 
 		setVisible(true);
 	}
@@ -163,41 +176,54 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 
 		if(e.getActionCommand().equals("Resolver")==true) {
 
-			ArrayList<String> habitacion = new ArrayList<String>();
 
-			String temp = "";
-			habitacion.add(filas + " " + columnas + " ");
-			for(int i=0;i<filas;i++) {
-				for(int j=0;j<columnas;j++) {
-					temp += tablero[i][j]; 
+
+			if(tablero==null) {
+				JOptionPane.showMessageDialog(panelMenu, "Debes cargar una partida primero", "ERROR", 1);
+			}else {
+				//Mensaje de carga
+				//resolver.setText("Calculando...");
+				etiquetaTiempo.setText("Calculando...");
+				
+				ArrayList<String> habitacion = new ArrayList<String>();
+				String temp = "";
+				habitacion.add(filas + " " + columnas + " ");
+				for(int i=0;i<filas;i++) {
+					for(int j=0;j<columnas;j++) {
+						temp += tablero[i][j]; 
+					}
+					habitacion.add(temp);
+					temp = "";
 				}
-				habitacion.add(temp);
-				temp = "";
-			}
 
-			//Inicio del tiempo de ejecucion
-			long inicio = System.currentTimeMillis(); 
+				//Inicio del tiempo de ejecucion
+				long inicio = System.currentTimeMillis(); 
 
-			ResolutorCajas resolutor = new ResolutorCajas(habitacion,Double.parseDouble(tiempo.getText()), inicio);
-			String res = resolutor.getCadResultado();
+				ResolutorCajas resolutor = new ResolutorCajas(habitacion,Double.parseDouble(tiempo.getText()), inicio);
+				String res = resolutor.getCadResultado();
 
-			//Calcular timempo de ejecucion
-			long fin = System.currentTimeMillis();
-			double tiempoEjec = (double) ((fin - inicio)/1000);
+				//Calcular timempo de ejecucion
+				long fin = System.currentTimeMillis();
+				double tiempoEjec = (double) ((fin - inicio)/1000);
 
-			if (tiempoEjec>Double.parseDouble(tiempo.getText())) {
-				JOptionPane.showMessageDialog(panelMenu, "Se ha superado el tiempo establecido", "Resultado", 1);
-			} else if(res.compareTo("T")==0){
-				JOptionPane.showMessageDialog(panelMenu, "Se ha superado el tiempo establecido", "Resultado", 1);
-			} else {
-				//Comprobar si ha tenido solucion o no
-				if(res.compareTo("N")!=0) {
-					JOptionPane.showMessageDialog(panelMenu, "Movimientos: " + res + '\n' + "Total: " + res.length(), "Resultado", 1);
+				if (tiempoEjec>Double.parseDouble(tiempo.getText())) {
+					JOptionPane.showMessageDialog(panelMenu, "Se ha superado el tiempo establecido", "Resultado", 1);
+				} else if(res.compareTo("T")==0){
+					JOptionPane.showMessageDialog(panelMenu, "Se ha superado el tiempo establecido", "Resultado", 1);
 				} else {
-					JOptionPane.showMessageDialog(panelMenu, "No hay ninguna solucion posible", "Resultado", 1);
+					resolver.setText("Fin");
+					repaint();
+					//Comprobar si ha tenido solucion o no
+					if(res.compareTo("N")!=0) {
+						resolver.setText("Fin");
+						JOptionPane.showMessageDialog(panelMenu, "Movimientos: " + res + '\n' + "Total: " + res.length(), "Resultado", 1);
+						dispose();
+					} else {
+						JOptionPane.showMessageDialog(panelMenu, "No hay ninguna solucion posible", "Resultado", 1);
+						dispose();
+					}
 				}
 			}
-
 		}
 
 		if(e.getActionCommand().equals("Guardar")==true) {
@@ -249,9 +275,25 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 
 		if(e.getActionCommand().equals("Cargar")==true) {
 
-			
+			time = 360;
+			filas = 0;
+			columnas = 0;
+			robotFil = 0;
+			robotCol = 0;
+			indiceHistorial = 0;
+			totalMov = 0;
+			componentes = null;
+			nextCharRob = "-"; 
+			debCharRob = "-";
+			historial = null;
+			manager = null;
+			control = null;
+			tablero = null;
+			//todaviaHayCaja = false;
+
+
 			//Cargar el fichero
-			JFileChooser loadFile = new JFileChooser();
+			loadFile = new JFileChooser();
 			loadFile.showOpenDialog(loadFile);
 			String ruta = loadFile.getSelectedFile().getAbsolutePath();
 			File f = new File(ruta);
@@ -359,6 +401,12 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 					cargar.setEnabled(false);
 					cargar.setBorder(BorderFactory.createLineBorder(new Color(220,220,220), 20));
 
+					//Poner boton guardar
+					guardar.setBackground(new Color(50,50,50,255));
+					guardar.setFont(new Font("Agency FB", Font.BOLD, 20));
+					guardar.setForeground(Color.WHITE);
+					guardar.setBorder(BorderFactory.createLineBorder(new Color(50,50,50,255), 20));
+					guardar.setEnabled(true);
 
 				} catch (Exception e2) {
 					// TODO: handle exception
@@ -370,6 +418,7 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 
 		if(e.getActionCommand().equals("<-")==true) {
 			if(indiceHistorial>0) {
+				//historial.remove(indiceHistorial);
 				indiceHistorial--;
 				tablero = historial.get(indiceHistorial);
 				totalMov--;
@@ -406,6 +455,7 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 
 		if(e.getActionCommand().equals("->")==true) {
 			if(indiceHistorial<historial.size()-1) {
+				//historial.remove(indiceHistorial);
 				indiceHistorial++;
 				tablero = historial.get(indiceHistorial);
 				totalMov++;
@@ -415,6 +465,8 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 					for(int j=0; j<columnas; j++) {
 						((AbstractButton)componentes[cont]).setEnabled(false);
 						if(tablero[i][j].compareTo("@")==0) {
+							robotFil = i;
+							robotCol = j;
 							((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/robot.png")));	
 						} else if(tablero[i][j].compareTo("#")==0) {
 							((AbstractButton)componentes[cont]).setIcon(new ImageIcon(getClass().getResource("ico/money.png")));	
@@ -442,6 +494,8 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 	private class ControladorKeys implements KeyEventDispatcher {
 		@Override
 		public boolean dispatchKeyEvent(KeyEvent e) {
+
+			todaviaHayCaja = false;
 
 			if (e.getID() == KeyEvent.KEY_PRESSED) {
 				//
@@ -855,7 +909,7 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 				indiceHistorial++;
 
 				//CONTROLAR GANAR PARTIDA
-				todaviaHayCaja = false;
+
 				for(int i=0; i<filas;i++) {
 					for(int j=0;j<columnas;j++) {
 						if(tablero[i][j].compareTo("#")==0) {
@@ -868,9 +922,14 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 					//JOptionPane pane = new JOptionPane();
 					//pane.showMessageDialog(panelMenu, "Has ganado! Movimientos totales: "+totalMov, "ENHORABUENA", 1);
 
+					//manager = null;
+					//control = null;
+
+					manager.removeKeyEventDispatcher(control);
+
 					JOptionPane.showMessageDialog(panelMenu, "Has ganado! Movimientos totales: "+totalMov, "ENHORABUENA", 1);
-					panelMenu.removeAll();
-					
+					//panelMenu.removeAll();
+					/*
 					time = 0;
 					filas = 0;
 					columnas = 0;
@@ -885,15 +944,18 @@ public class VentanaJug extends JFrame implements Runnable, ActionListener {
 					//manager = null;
 					//control = null;
 					//tablero = null;
-					
-					
-					
+					todaviaHayCaja = false;*/
+
+
+
 					//Restablecer el boton cargar
 					cargar.setBackground(new Color(50,50,50,255));
 					cargar.setEnabled(true);
 					cargar.setBorder(BorderFactory.createLineBorder(new Color(50,50,50,255), 20));
-					
-					repaint();
+
+					dispose();
+
+					//repaint();
 				}
 
 			} else if (e.getID() == KeyEvent.KEY_TYPED) {

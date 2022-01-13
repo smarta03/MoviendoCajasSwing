@@ -3,6 +3,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.KeyboardFocusManager;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -86,8 +89,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener{
 
 		}
 
-		if(e.getActionCommand().equals("JUGAR")==true) {
-			boolean stop = false;
+		if(e.getActionCommand().equals("JUGAR")==true) {	
 			VentanaJug ventanajug = new VentanaJug();
 			Thread hilo = new Thread(ventanajug);
 			hilo.start();
